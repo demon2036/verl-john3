@@ -66,4 +66,6 @@ class MCPSearchTool(MCPBaseTool):
         metadata["queries"] = query_list
         metadata["query_count"] = len(query_list)
         metadata["total_results"] = res_cnt
+        res=content
+        print(content)
         return res, metadata
