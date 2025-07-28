@@ -1255,9 +1255,9 @@ class SGLangRollout(BaseRollout):
 
                 _tools_kwargs = {k:{} for k in self._tool_map.keys()}
 
-                for k in _tools_kwargs.keys():
-                    print(f'{k=}')
-                print(f'{self._tool_map=}')
+                # for k in _tools_kwargs.keys():
+                #     print(f'{k=}')
+                # print(f'{self._tool_map=}')
 
                 _tool_schemas = [self._tool_map[k].get_openai_tool_schema() for k in _tools_kwargs.keys()]
                 _input_ids = None
