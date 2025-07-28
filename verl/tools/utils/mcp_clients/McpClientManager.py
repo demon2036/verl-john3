@@ -48,6 +48,7 @@ class MCPClientManager:
             if url.endswith('/sse'):
                 transport = SSETransport(url=url, headers=headers)
             else:
+                print('use mcp')
                 transport = StreamableHTTPTransport(url=url, headers=headers)
 
             client = Client(transport)
