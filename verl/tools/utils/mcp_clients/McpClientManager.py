@@ -15,10 +15,13 @@
 import asyncio
 import json
 import logging
+from contextlib import AsyncExitStack
 from typing import Any
 
 from fastmcp import Client
 from fastmcp.client.transports import SSETransport
+from mcp import ClientSession
+from mcp.client.sse import sse_client
 
 from verl.tools.utils.mcp_clients.utils import TokenBucket, mcp2openai
 
@@ -65,17 +68,38 @@ class MCPClientManager:
             return await client.call_tool_mcp(tool_name, parameters)
 
     async def fetch_tool_schemas(self, tool_selected_list: list[str]) -> list[dict]:
-        tool_schemas = []
-        for client in self.clients:
-            async with client:
-                tools = await client.list_tools_mcp()
-                for tool in tools.tools:
-                    if not tool_selected_list:
-                        self.tool_client_mapping[tool.name] = client
-                        tool_schemas.append(mcp2openai(tool))
-                    elif tool.name in tool_selected_list:
-                        self.tool_client_mapping[tool.name] = client
-                        tool_schemas.append(mcp2openai(tool))
+        async with AsyncExitStack() as stack:
+            client = sse_client
+
+            # 连接服务器
+            *connection_args, = await stack.enter_async_context(
+                client(url='https://qbmanusmcp.woa.com/serp/sse')
+            )
+            read, write = connection_args[:2]
+
+            session = await stack.enter_async_context(
+                ClientSession(read, write)
+            )
+            await session.initialize()
+            tools=session.list_tools()
+            print(tools)
+
+            while True:
+                pass
+
+
+
+        # tool_schemas = []
+        # for client in self.clients:
+        #     async with client:
+        #         tools = await client.list_tools_mcp()
+        #         for tool in tools.tools:
+        #             if not tool_selected_list:
+        #                 self.tool_client_mapping[tool.name] = client
+        #                 tool_schemas.append(mcp2openai(tool))
+        #             elif tool.name in tool_selected_list:
+        #                 self.tool_client_mapping[tool.name] = client
+        #                 tool_schemas.append(mcp2openai(tool))
 
         return tool_schemas
 
