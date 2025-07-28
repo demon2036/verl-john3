@@ -63,14 +63,14 @@ class ToolRegistry:
 
 class MCPClientManager:
     """MCP Client Manager with streamable HTTP support"""
+    initialized = False
+    sessions: List[ClientSession] = []
+    registry = ToolRegistry()
+    rate_limiter: Optional[TokenBucket] = None
+    stack: Optional[AsyncExitStack] = None
+    _root_server_name = "mcpServers"
 
-    def __init__(self):
-        self.initialized = False
-        self.sessions: List[ClientSession] = []
-        self.registry = ToolRegistry()
-        self.rate_limiter: Optional[TokenBucket] = None
-        self.stack: Optional[AsyncExitStack] = None
-        self._root_server_name = "mcpServers"
+
 
     async def initialize(self, config_path: str, rate_limit: float = 10.0) -> None:
         """Initialize the MCP Client Manager and start all clients"""
