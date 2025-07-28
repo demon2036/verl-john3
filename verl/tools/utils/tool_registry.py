@@ -23,6 +23,8 @@ from omegaconf import OmegaConf
 
 from verl.tools.schemas import OpenAIFunctionToolSchema
 
+
+
 logger = logging.getLogger(__file__)
 logger.setLevel(os.getenv("VERL_LOGGING_LEVEL", "WARN"))
 
@@ -99,9 +101,28 @@ def initialize_tools_from_config(tools_config_file):
                 )
                 tool_list.append(tool)
             case ToolType.MCP:
-                loop = asyncio.get_event_loop()
-                mcp_tools = loop.run_until_complete(initialize_mcp_tool(tool_cls, tool_config))
+                # loop = asyncio.get_event_loop()
+                # mcp_tools = loop.run_until_complete(initialize_mcp_tool(tool_cls, tool_config))
+                # tool_list.extend(mcp_tools)
+
+                import concurrent.futures
+
+                def run_in_new_loop():
+                    new_loop = asyncio.new_event_loop()
+                    asyncio.set_event_loop(new_loop)
+                    try:
+                        return new_loop.run_until_complete(
+                            initialize_mcp_tool(tool_cls, tool_config)
+                        )
+                    finally:
+                        new_loop.close()
+
+                with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+                    future = executor.submit(run_in_new_loop)
+                    mcp_tools = future.result()
+
                 tool_list.extend(mcp_tools)
+
             case _:
                 raise NotImplementedError
     return tool_list
