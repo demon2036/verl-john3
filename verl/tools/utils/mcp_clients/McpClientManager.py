@@ -69,6 +69,9 @@ class MCPClientManager:
         for client in self.clients:
             async with client:
                 tools = await client.list_tools_mcp()
+
+                print(tools)
+
                 for tool in tools.tools:
                     if not tool_selected_list:
                         self.tool_client_mapping[tool.name] = client
