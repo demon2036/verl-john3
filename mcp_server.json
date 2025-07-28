@@ -1,8 +1,8 @@
 {
     "mcpServers": {
         "Tavily Expert": {
-            "url": "http://0.0.0.0:8000/sse",
-            "auth_token": "your_tavily_api_token"
+            "url": "http://0.0.0.0:8000/sse"
+
         }
     }
 }
