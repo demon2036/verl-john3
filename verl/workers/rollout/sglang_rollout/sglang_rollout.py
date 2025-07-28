@@ -1252,6 +1252,11 @@ class SGLangRollout(BaseRollout):
         ):
             if self._tool_schemas:
                 _tools_kwargs = prompts.non_tensor_batch["tools_kwargs"][data_idx]
+
+                for k in _tools_kwargs.keys():
+                    print(k)
+                print(self._tool_map)
+
                 _tool_schemas = [self._tool_map[k].get_openai_tool_schema() for k in _tools_kwargs.keys()]
                 _input_ids = None
                 _attention_mask = None
