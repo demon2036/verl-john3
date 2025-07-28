@@ -28,8 +28,14 @@ logger.setLevel(os.getenv("VERL_LOGGING_LEVEL", "WARN"))
 class MCPSearchTool(MCPBaseTool):
     def __init__(self, config: dict, tool_schema: OpenAIFunctionToolSchema):
         super().__init__(config, tool_schema)
+        print(f'here init mcp tool {tool_schema}')
 
     def _parse_tool_result(self, content: list) -> tuple[str, dict]:
+
+        print(content)
+        while True:
+            pass
+
         res = ""
         res_cnt = 0
         query_list = []
@@ -66,6 +72,4 @@ class MCPSearchTool(MCPBaseTool):
         metadata["queries"] = query_list
         metadata["query_count"] = len(query_list)
         metadata["total_results"] = res_cnt
-        res=content
-        print(content)
         return res, metadata
