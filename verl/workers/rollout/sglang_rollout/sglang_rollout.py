@@ -1251,11 +1251,13 @@ class SGLangRollout(BaseRollout):
             zip(prompts.non_tensor_batch["raw_prompt"], multi_modal_data_list, strict=True)
         ):
             if self._tool_schemas:
-                _tools_kwargs = prompts.non_tensor_batch["tools_kwargs"][data_idx]
+                # _tools_kwargs = prompts.non_tensor_batch["tools_kwargs"][data_idx]
+
+                _tools_kwargs = {k:{} for k in self._tool_map.keys()}
 
                 for k in _tools_kwargs.keys():
-                    print(k)
-                print(self._tool_map)
+                    print(f'{k=}')
+                print(f'{self._tool_map=}')
 
                 _tool_schemas = [self._tool_map[k].get_openai_tool_schema() for k in _tools_kwargs.keys()]
                 _input_ids = None
