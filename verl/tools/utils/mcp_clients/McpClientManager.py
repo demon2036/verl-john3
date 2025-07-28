@@ -17,8 +17,10 @@ import json
 import logging
 from typing import Any
 
+import fastmcp.client.transports
 from fastmcp import Client
-from fastmcp.client.transports import SSETransport, StreamableHTTPTransport
+from fastmcp.client.transports import SSETransport, StreamableHttpTransport
+
 
 from verl.tools.utils.mcp_clients.utils import TokenBucket, mcp2openai
 
@@ -49,7 +51,7 @@ class MCPClientManager:
                 transport = SSETransport(url=url, headers=headers)
             else:
                 print('use mcp')
-                transport = StreamableHTTPTransport(url=url, headers=headers)
+                transport = StreamableHttpTransport(url=url, headers=headers)
 
             client = Client(transport)
             self.clients.append(client)
