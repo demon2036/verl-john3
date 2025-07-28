@@ -126,5 +126,5 @@ def initialize_tools_from_config(tools_config_file):
             case _:
                 raise NotImplementedError
 
-    print(f'{tool_list=pr}')
+    print(f'{tool_list=}')
     return tool_list
