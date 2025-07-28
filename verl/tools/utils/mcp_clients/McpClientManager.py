@@ -66,6 +66,9 @@ class MCPClientManager:
 
     async def fetch_tool_schemas(self, tool_selected_list: list[str]) -> list[dict]:
         tool_schemas = []
+
+        print(f'{self.clients=}')
+
         for client in self.clients:
             async with client:
                 tools = await client.list_tools_mcp()
