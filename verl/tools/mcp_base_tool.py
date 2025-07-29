@@ -62,10 +62,6 @@ class MCPBaseTool(BaseTool):
 
     async def _call_tool(self, instance_id, parameters) -> tuple[str, dict]:
         err_msg = ""
-
-        call_tool_result = await ClientManager.call_tool(self.name, parameters, self.timeout)
-
-
         try:
             call_tool_result = await ClientManager.call_tool(self.name, parameters, self.timeout)
         except ClientError as e:

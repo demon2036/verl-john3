@@ -104,6 +104,7 @@ if __name__ == "__main__":
 
     train_dataset = train_dataset.map(function=make_map_fn("train"), with_indices=True)
     test_dataset = test_dataset.map(function=make_map_fn("test"), with_indices=True)
+    test_dataset = test_dataset.select(range(8))
 
     local_dir = args.local_dir
     hdfs_dir = args.hdfs_dir
